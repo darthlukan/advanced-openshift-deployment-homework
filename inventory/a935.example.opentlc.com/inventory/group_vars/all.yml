@@ -1,0 +1,30 @@
+---
+# Cluster Environment ID to uniquely identify the environment
+env_id: a935
+
+ansible_user: root
+ansible_become: true
+
+dns_domain: "example.opentlc.com"
+
+# docker_storage_block_device: "/dev/vdb"
+# docker_storage_mount_point: "/var/lib/containers/docker"
+
+# Subscription Management Details
+rhsm_register: True
+rhsm_repos:
+ - "rhel-7-server-rpms"
+ - "rhel-7-server-ose-3.11-rpms"
+ - "rhel-7-server-extras-rpms"
+ - "rhel-7-server-ansible-2.6-rpms"
+
+
+# Use RHSM username, password and optionally pool:
+rhsm_username: "{{ lookup('env', 'RHSM_USER' )}}"
+rhsm_password: "{{ lookup('env', 'RHSM_PASSWD' )}}"
+# leave commented out if you want to `--auto-attach` a pool
+rhsm_pool: "{{ lookup('env', 'RHSM_POOL' )}}"
+
+# Specify the version of docker to use
+docker_version: "1.13.*"
+...
