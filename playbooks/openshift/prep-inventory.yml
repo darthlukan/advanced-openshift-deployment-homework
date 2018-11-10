@@ -1,5 +1,4 @@
 ---
-
 - name: Generate Environment ID
   set_fact:
     env_random_id: "{{ ansible_date_time.epoch }}"
@@ -73,3 +72,4 @@
   set_fact:
     list_of_packages_to_install: "{{ list_of_packages_to_install }} +
                                   {{ additional_list_of_packages_to_install | default([]) }}"
+...
