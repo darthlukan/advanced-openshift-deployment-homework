@@ -1,5 +1,7 @@
 ---
 openshift_node_group_name: 'node-config-compute'
+openshift_node_labels:
+  - 'node-role.kubernetes.io/compute=true'
 
 openshift_node_open_ports:
 - service: "prometheus node exporter"

@@ -1,5 +1,7 @@
 ---
 openshift_node_group_name: 'node-config-infra'
+openshift_node_labels: 
+  - 'node-role.kubernetes.io/infra=true'
 
 openshift_node_open_ports:
 - service: "router stats port"

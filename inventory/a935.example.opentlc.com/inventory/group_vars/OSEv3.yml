@@ -1,13 +1,25 @@
 ---
+# Version vars
+openshift_release: v3.11
+openshift_image_tag: v3.11.16
+openshift_pkg_version: -3.11.16
+
+# Cluster core config
 deployment_type: openshift-enterprise
 openshift_deployment_type: openshift-enterprise
 openshift_master_cluster_method: native
-openshift_release: v3.11
 
+# NOTE: 'byo' is used here as a placeholder. The installer expects
+# one of 'gcp', 'aws', or 'osp' for pre-provisioning. In a BYO
+# context we avoid errors due to lack of support by providing a "dummy"
+# infra id.
+hosting_infrastructure: 'byo'
+
+# Cluster Host Variables. See 'Table 1. Host Variables'
+# here: https://docs.openshift.com/enterprise/3.0/install_config/install/advanced_install.html
 openshift_master_cluster_public_hostname: console.{{ env_id }}.{{ dns_domain }}
 openshift_master_cluster_hostname: api.{{ env_id }}.{{ dns_domain }}
 openshift_master_default_subdomain: apps.{{ env_id }}.{{ dns_domain }}
-
 
 # HTPASSWD Identity Provider
 openshift_master_identity_providers:
@@ -15,27 +27,27 @@ openshift_master_identity_providers:
    'login': 'true'
    'challenge': 'true'
    'kind': 'HTPasswdPasswordIdentityProvider'
+openshift_master_htpasswd_file: '/etc/origin/master/htpasswd'
 
 #this will create an admin/admin user
 openshift_master_htpasswd_users:
   admin: $apr1$7aiANAYb$TOUYVUqnBqBlD5AQEIMYw1
 
-openshift_hosted_router_selector: 'node-role.kubernetes.io/infra=true'
 openshift_hosted_manage_router: true
+openshift_hosted_router_selector: 'node-role.kubernetes.io/infra=true'
 osm_default_node_selector: 'node-role.kubernetes.io/compute=true'
 openshift_docker_options: "--log-driver=json-file --log-opt max-size=50m --log-opt max-file=100"
 
-# os_sdn_network_plugin_name: 'redhat/openshift-ovs-networkpolicy'
-os_sdn_network_plugin_name: 'redhat/openshift-ovs-multitenant'
+os_sdn_network_plugin_name: 'redhat/openshift-ovs-networkpolicy'
 os_firewall_use_firewalld: true
 osm_cluster_network_cidr: 10.1.0.0/16
 
 # Registry URL & Credentials
-# For more info: https://access.redhat.com/terms-based-registry/
 oreg_url: 'registry.redhat.io/openshift3/ose-${component}:${version}'
-# oreg_auth_user: "{{ lookup('env', 'OREG_AUTH_USER' )}}"
-# oreg_auth_password: "{{ lookup('env', 'OREG_AUTH_PASSWORD' )}}"
+oreg_auth_user: "{{ lookup('env', 'OREG_AUTH_USER' )}}"
+oreg_auth_password: "{{ lookup('env', 'OREG_AUTH_PASSWORD' )}}"
 
+# Metrics
 openshift_hosted_prometheus_deploy: false
 openshift_cfme_install_app: false
 
