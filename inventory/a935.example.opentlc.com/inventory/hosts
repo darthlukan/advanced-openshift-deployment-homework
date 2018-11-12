@@ -17,11 +17,14 @@ masters
 infra_hosts
 app_hosts
 
-[infra_hosts:children]
+[infra_hosts]
 infranode[1:2].a935.internal
 
-[app_hosts:children]
+[app_hosts]
 node[1:4].a935.internal
 
 [nfs]
 support1.a935.internal
+
+[lb]
+loadbalancer1.a935.internal
