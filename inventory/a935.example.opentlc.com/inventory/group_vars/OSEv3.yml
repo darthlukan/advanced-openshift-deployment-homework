@@ -3,6 +3,8 @@
 openshift_release: v3.11
 openshift_image_tag: v3.11.16
 openshift_pkg_version: -3.11.16
+# Adding this in because of a possible bug in Ansible 2.6+ with openshift-ansible.3.7+
+openshift_version: v3.11.16
 
 # Cluster core config
 deployment_type: 'openshift-enterprise'
