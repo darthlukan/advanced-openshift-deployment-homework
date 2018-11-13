@@ -24,7 +24,7 @@ infranode[1:2].a935.internal ansible_ssh_host="{{ inventory_hostname.split()[0] 
 node[1:4].a935.internal ansible_ssh_host="{{ inventory_hostname.split()[0] }}.a935.internal"
 
 [nfs]
-support1.a935.internal ansible_ssh_host=support1.a935.internal"
+support1.a935.internal ansible_ssh_host=support1.a935.internal
 
 [lb]
-loadbalancer1.a935.internal ansible_ssh_host=loadbalancer1.a935.internal"
+loadbalancer1.a935.internal ansible_ssh_host=loadbalancer1.a935.internal
