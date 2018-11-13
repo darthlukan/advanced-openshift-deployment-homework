@@ -1,10 +1,10 @@
 ---
 # Execute pre-install provided by casl
-- import_playbook: pre-install.yml
+- import_playbook: openshift/pre-install.yml
 
 # Execute install provided by casl
-- import_playbook: install.yml
+- import_playbook: openshift/install.yml
 
 # Execute post_install provided by casl
-- import_playbook: post-install.yml
+- import_playbook: openshift/post-install.yml
 ...
