@@ -43,6 +43,23 @@ openshift_router_selector: 'node-role.kubernetes.io/infra=true'
 osm_default_node_selector: 'node-role.kubernetes.io/compute=true'
 openshift_docker_options: "--log-driver=json-file --log-opt max-size=50m --log-opt max-file=100"
 
+# Storage
+# We're using NFS (first pass) so we have to enable unsupported configs
+# Our NFS share has 50Gi available, we're going to allocate 10 for the registry
+# which gives us enough to toy with different PVs later
+#
+# TODO: Swap this out for a OCS-3.11 config using Gluster
+#
+openshift_enable_unsupported_configurations: true
+openshift_hosted_registry_storage_kind: nfs
+openshift_hosted_registry_storage_host: support1.a935.internal
+openshift_hosted_registry_storage_access_modes: ['ReadWriteMany']
+openshift_hosted_registry_storage_nfs_directory: /srv/nfs/
+openshift_hosted_registry_storage_nfs_options: '*(rw,root_squash,no_wdelay,sync)'
+openshift_hosted_registry_storage_volume_name: registry
+openshift_hosted_registry_storage_volume_size: 10Gi
+openshift_hosted_registry_selector: 'node-role.kubernetes.io/infra=true'
+
 # Networking
 os_sdn_network_plugin_name: 'redhat/openshift-ovs-networkpolicy'
 os_firewall_use_firewalld: true
