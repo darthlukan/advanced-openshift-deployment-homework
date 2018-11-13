@@ -5,9 +5,9 @@ openshift_image_tag: v3.11.16
 openshift_pkg_version: -3.11.16
 
 # Cluster core config
-deployment_type: openshift-enterprise
-openshift_deployment_type: openshift-enterprise
-openshift_master_cluster_method: native
+deployment_type: 'openshift-enterprise'
+openshift_deployment_type: 'openshift-enterprise'
+openshift_master_cluster_method: 'native'
 
 # Examples
 openshift_install_examples: true
