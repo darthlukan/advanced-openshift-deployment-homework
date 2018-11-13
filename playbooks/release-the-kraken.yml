@@ -1,0 +1,10 @@
+---
+# Execute pre-install provided by casl
+- import_playbook: pre-install.yml
+
+# Execute install provided by casl
+- import_playbook: install.yml
+
+# Execute post_install provided by casl
+- import_playbook: post-install.yml
+...
