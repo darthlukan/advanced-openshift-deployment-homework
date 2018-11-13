@@ -7,8 +7,8 @@ ansible_become: true
 
 dns_domain: "example.opentlc.com"
 
-# docker_storage_block_device: "/dev/vdb"
-# docker_storage_mount_point: "/var/lib/containers/docker"
+docker_storage_block_device: "/dev/xvdc"
+docker_storage_mount_point: "/var/lib/containers/docker"
 
 # Subscription Management Details
 rhsm_register: True
