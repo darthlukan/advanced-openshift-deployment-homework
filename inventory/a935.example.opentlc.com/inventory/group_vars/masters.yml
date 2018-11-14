@@ -1,4 +1,6 @@
 ---
+# This isn't being used for some reason
+# TODO: Find existing issue to "me too" or file one on Github
 openshift_node_group_name: 'node-config-master'
 openshift_node_labels: 
   - 'node-role.kubernetes.io/master=true'
