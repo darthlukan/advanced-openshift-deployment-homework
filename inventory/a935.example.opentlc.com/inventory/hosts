@@ -10,8 +10,8 @@ lb
 [masters]
 master[1:3].a935.internal ansible_ssh_host="{{ inventory_hostname.split('.')[0] }}.a935.internal"
 
-[masters:vars]
-openshift_node_group_name='node-config-master'
+# [masters:vars]
+# openshift_node_group_name='node-config-master'
 
 [etcd]
 master[1:3].a935.internal
@@ -25,20 +25,20 @@ nfs
 [infra_hosts]
 infranode[1:2].a935.internal ansible_ssh_host="{{ inventory_hostname.split('.')[0] }}.a935.internal"
 
-[infra_hosts:vars]
-openshift_node_group_name='node-config-infra'
+# [infra_hosts:vars]
+# openshift_node_group_name='node-config-infra'
 
 [app_hosts]
 node[1:4].a935.internal ansible_ssh_host="{{ inventory_hostname.split('.')[0] }}.a935.internal"
 
-[app_hosts:vars]
-openshift_node_group_name='node-config-compute'
+# [app_hosts:vars]
+# openshift_node_group_name='node-config-compute'
 
 [nfs]
 support1.a935.internal ansible_ssh_host=support1.a935.internal
 
-[nfs:vars]
-openshift_node_group_name='node-config-compute'
+# [nfs:vars]
+# openshift_node_group_name='node-config-compute'
 
 [lb]
 loadbalancer1.a935.internal ansible_ssh_host=loadbalancer1.a935.internal
