@@ -11,6 +11,12 @@ deployment_type: 'openshift-enterprise'
 openshift_deployment_type: 'openshift-enterprise'
 openshift_master_cluster_method: 'native'
 
+# This is a hack because for whatever the reason we're not getting the response we expect from the registry
+# See: https://github.com/openshift/openshift-ansible/issues/7721
+# AND
+# https://github.com/openshift/openshift-ansible/issues/6002
+openshift_disable_check: disk_availability,memory_availability,docker_storage,docker_image_availability
+
 # Examples
 openshift_install_examples: true
 
