@@ -5,6 +5,7 @@ OSEv3
 masters
 nodes
 etcd
+lb
 
 [masters]
 master[1:3].a935.internal ansible_ssh_host="{{ inventory_hostname.split('.')[0] }}.a935.internal"
@@ -16,6 +17,7 @@ master[1:3].a935.internal
 masters
 infra_hosts
 app_hosts
+nfs
 
 [infra_hosts]
 infranode[1:2].a935.internal ansible_ssh_host="{{ inventory_hostname.split('.')[0] }}.a935.internal"
