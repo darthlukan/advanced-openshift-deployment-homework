@@ -23,5 +23,4 @@ export RHSM_PASSWD=$RHSM_PASS
 # RELEASE THE KRAKEN!!!
 ansible-playbook \
     -f 20 \
-    -i ./inventory/a935.example.opentlc.com/inventory \
     ./playbooks/release-the-kraken.yml
