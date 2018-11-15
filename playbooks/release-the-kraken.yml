@@ -4,7 +4,7 @@
   tasks:
     - name: Install docker on loadbalancer
       yum:
-        name: docker
+        name: docker-{{ docker_version }}
         state: present
 
 # Execute pre-install provided by casl
