@@ -7,6 +7,7 @@ ansible_become: true
 
 dns_domain: "example.opentlc.com"
 
+# This doesn't appear to be populating either now?
 docker_storage_block_device: "/dev/xvdc"
 docker_storage_mount_point: "/var/lib/containers/docker"
 
@@ -23,7 +24,7 @@ rhsm_repos:
 rhsm_username: "{{ lookup('env', 'RHSM_USER' )}}"
 rhsm_password: "{{ lookup('env', 'RHSM_PASSWD' )}}"
 # leave commented out if you want to `--auto-attach` a pool
-rhsm_pool: "{{ lookup('env', 'RHSM_POOL' )}}"
+# rhsm_pool: "{{ lookup('env', 'RHSM_POOL' )}}"
 
 # Specify the version of docker to use
 docker_version: "1.13.1"
