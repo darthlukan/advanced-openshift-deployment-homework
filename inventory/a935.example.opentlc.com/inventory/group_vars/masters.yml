@@ -1,6 +1,5 @@
 ---
-# This isn't being used for some reason
-# TODO: Find existing issue to "me too" or file one on Github
+ansible_ssh_host: "{{ inventory_hostname.split('.')[0] }}.a935.internal"
 openshift_node_group_name: 'node-config-master'
 openshift_node_labels: 
   - 'node-role.kubernetes.io/master=true'
