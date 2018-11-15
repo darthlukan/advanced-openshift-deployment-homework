@@ -7,9 +7,10 @@ openshift_pkg_version: -3.11.16
 openshift_version: v3.11.16
 
 # Cluster core config
-deployment_type: 'openshift-enterprise'
-openshift_deployment_type: 'openshift-enterprise'
-openshift_master_cluster_method: 'native'
+deployment_type: openshift-enterprise
+# TODO: Why does this not populate for rhsm tasks?
+openshift_deployment_type: openshift-enterprise
+openshift_master_cluster_method: native
 
 # This is a hack because for whatever the reason we're not getting the response we expect from the registry
 # See: https://github.com/openshift/openshift-ansible/issues/7721
@@ -90,7 +91,6 @@ openshift_node_open_ports:
     port: "1936/tcp"
   - service: "prometheus node exporter"
     port: "9100/tcp"
-
 
 openshift_node_groups:
 - name: node-config-master
