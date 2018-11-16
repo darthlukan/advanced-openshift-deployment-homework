@@ -1,5 +1,6 @@
 ---
 ansible_ssh_host: "{{ inventory_hostname.split('.')[0] }}.a935.internal"
+openshift_hostname: "{{ ansible_ssh_host }}"
 openshift_node_group_name: 'node-config-infra'
 openshift_node_labels: 
   - 'node-role.kubernetes.io/infra=true'
