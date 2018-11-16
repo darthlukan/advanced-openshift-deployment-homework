@@ -17,6 +17,9 @@
 - hosts: OSEv3
   pre_tasks:
     - import_tasks: prep-inventory.yml
+    # Setting this fact here as doing it before wasn't populating for lb and nfs
+    # Sometimes it wouldn't capture for masters as well.
+    # TODO: Why does this need to be set for nfs and lb hosts?
     - set_fact:
         docker_storage_block_device: "{{ hostvars['localhost'].docker_storage_block_device }}"
   tasks:
