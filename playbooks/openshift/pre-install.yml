@@ -28,16 +28,18 @@
     # NOTE: this "openstack" role is generic and can be used across all cloud
     #       providers. We should work with the `openshift-ansible` team to get
     #       this corrected - i.e.: made generic.
-    - import_role:
-        name: ../../galaxy/openshift-ansible/roles/openshift_openstack
-        block:
-          - tasks_from: container-storage-setup.yml
-        rescue:
-          - debug:
-              msg: "Failed to run on host {{ inventory_host }}"
-          - command: /bin/true
-      vars:
-        ansible_become: True
+    - name: Run openshift_openstack for container-storage-setup
+      block:
+        - import_role:
+          name: ../../galaxy/openshift-ansible/roles/openshift_openstack
+          tasks_from: container-storage-setup.yml
+          vars:
+            ansible_become: True
+      rescue:
+        - debug:
+            msg: "Failed to run on host {{ inventory_host }}"
+        - command: /bin/true
+
     - import_role:
         name: ../../galaxy/infra-ansible/roles/config-versionlock
       vars:
