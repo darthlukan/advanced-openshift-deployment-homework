@@ -4,10 +4,10 @@
 # OpenShift Pre-Requisites
 
 # Ensure the 'docker_storage_block_device' is correctly populated for all nodes
-# - hosts: nodes
-#   tasks:
-#     - set_fact:
-#         docker_storage_block_device: "{{ hostvars['localhost'].docker_storage_block_device }}"
+- hosts: nodes
+  tasks:
+    - set_fact:
+        docker_storage_block_device: "{{ hostvars['localhost'].docker_storage_block_device }}" 
 
 #
 # - subscribe hosts
@@ -17,11 +17,6 @@
 - hosts: OSEv3
   pre_tasks:
     - import_tasks: prep-inventory.yml
-    # Setting this fact here as doing it before wasn't populating for lb and nfs
-    # Sometimes it wouldn't capture for masters as well.
-    # TODO: Why does this need to be set for nfs and lb hosts?
-    - set_fact:
-        docker_storage_block_device: "{{ hostvars['localhost'].docker_storage_block_device }}"
   tasks:
     - import_role:
         name: ../../galaxy/infra-ansible/roles/rhsm
@@ -29,12 +24,18 @@
         ansible_become: True
       when:
         - rhsm_register
+    # TODO: This role should ONLY run if the host is also in the nodes group
     # NOTE: this "openstack" role is generic and can be used across all cloud
     #       providers. We should work with the `openshift-ansible` team to get
     #       this corrected - i.e.: made generic.
     - import_role:
         name: ../../galaxy/openshift-ansible/roles/openshift_openstack
-        tasks_from: container-storage-setup.yml
+        block:
+          - tasks_from: container-storage-setup.yml
+        rescue:
+          - debug:
+              msg: "Failed to run on host {{ inventory_host }}"
+          - command: /bin/true
       vars:
         ansible_become: True
     - import_role:
@@ -66,6 +67,9 @@
     - import_role:
         name: ../../galaxy/infra-ansible/roles/update-host
         tasks_from: wait-for-host
+
+- hosts: nodes
+  tasks:
     - service:
         name: docker
         state: started
