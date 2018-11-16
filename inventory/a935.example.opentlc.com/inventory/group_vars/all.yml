@@ -28,5 +28,6 @@ rhsm_password: "{{ lookup('env', 'RHSM_PASSWD' )}}"
 
 # Specify the version of docker to use
 docker_version: "1.13.1"
+# This wasn't being populated, so it was placed here
 openshift_docker_service_name: 'docker'
 ...
