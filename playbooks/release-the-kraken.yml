@@ -1,12 +1,4 @@
 ---
-# Temporary hack/experiment to see what our actual error is with docker being missing
-- hosts: lb
-  tasks:
-    - name: Install docker on loadbalancer
-      yum:
-        name: docker
-        state: present
-
 # Execute pre-install provided by casl
 - import_playbook: openshift/pre-install.yml
 
