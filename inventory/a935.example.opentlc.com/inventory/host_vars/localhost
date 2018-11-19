@@ -1,8 +1,0 @@
----
-ansible_connection: local
-ansible_become: false
-
-# Putting this here because that's where pre-install seems to want to find them
-docker_storage_block_device: "/dev/xvdc"
-docker_storage_mount_point: "/var/lib/containers/docker"
-...
