@@ -2,15 +2,7 @@
 # to support the operation of CASL provisioning/runs.
 # and also support any role dependency while using the repository in Ansible Tower
 
-# From 'infra-ansible'
-- src: https://github.com/redhat-cop/infra-ansible
-  version: v1.0.4
-
-# From 'openshift-applier'
-- src: https://github.com/redhat-cop/openshift-applier
-  version: v2.0.4
-
 # From 'openshift-ansible'
 - src: https://github.com/openshift/openshift-ansible
-  version: release-3.11
+  version: v3.11.0
 
