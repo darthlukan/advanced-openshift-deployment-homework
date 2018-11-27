@@ -1,134 +1,186 @@
-[cluster_hosts:children]
-OSEv3
+#### OCP 3.11.16 ####
+#
+# 
+# 
 
+[OSEv3:vars]
+#
+# Cluster Vars
+#
+timeout=60
+ansible_user=ec2-user
+ansible_become=yes
+openshift_deployment_type=openshift-enterprise
+openshift_disable_check="disk_availability,memory_availability,docker_image_availability"
+openshift_image_tag=v3.11.16
+openshift_pkg_version=-3.11.16
+openshift_release=3.11.16
+
+openshift_master_api_port=443
+openshift_master_console_port=443
+
+openshift_master_cluster_method=native
+openshift_master_cluster_hostname=loadbalancer1.$GUID.internal
+openshift_master_cluster_public_hostname=loadbalancer1.$GUID.example.opentlc.com
+openshift_master_default_subdomain=apps.$GUID.example.opentlc.com
+openshift_master_overwrite_named_certificates=True
+
+osm_cluster_network_cidr=10.1.0.0/16
+openshift_portal_net=172.30.0.0/16
+
+os_sdn_network_plugin_name='redhat/openshift-ovs-networkpolicy'
+
+openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider'}]
+
+openshift_master_htpasswd_file=/root/htpasswd.openshift
+openshift_cluster_monitoring_operator_install=true
+openshift_node_groups=[{'name': 'node-config-master', 'labels': ['node-role.kubernetes.io/master=true','runtime=docker']}, {'name': 'node-config-infra', 'labels': ['node-role.kubernetes.io/infra=true','runtime=docker']}, {'name': 'node-config-compute', 'labels': ['node-role.kubernetes.io/compute=true','runtime=docker'], 'edits': [{ 'key': 'kubeletArguments.pods-per-core','value': ['20']}]}]
+logrotate_scripts=[{"name": "syslog", "path": "/var/log/cron\n/var/log/maillog\n/var/log/messages\n/var/log/secure\n/var/log/spooler\n", "options": ["daily", "rotate 7","size 500M", "compress", "sharedscripts", "missingok"], "scripts": {"postrotate": "/bin/kill -HUP `cat /var/run/syslogd.pid 2> /dev/null` 2> /dev/null || true"}}]
+
+openshift_enable_olm=true
+openshift_examples_modify_imagestreams=true
+
+openshift_enable_unsupported_configurations=True
+
+openshift_router_selector='node-role.kubernetes.io/infra=true'
+openshift_hosted_router_replicas=2
+
+openshift_enable_service_catalog=true
+
+template_service_broker_install=true
+openshift_template_service_broker_namespaces=['openshift']
+
+ansible_service_broker_install=true
+ansible_service_broker_local_registry_whitelist=['.*-apb$']
+# END Cluster vars
+
+#
+# Registry
+#
+oreg_url=registry.redhat.io/openshift3/ose-${component}:${version}
+oreg_auth_user="{{ lookup('env', 'OREG_USER') }}"
+oreg_auth_password="{{ lookup('env', 'OREG_PASS') }}"
+# openshift_additional_registry_credentials=[{'host':'registry.connect.redhat.com','user':'{{ lookup("env", "OREG_USER") }}','password':'{{ lookup("env", "OREG_PASS") }}','test_image':'mongodb/enterprise-operator:0.3.2'}]
+
+openshift_registry_selector='node-role.kubernetes.io/infra=true'
+openshift_hosted_registry_replicas=1
+openshift_hosted_registry_pullthrough=true
+openshift_hosted_registry_acceptschema2=true
+openshift_hosted_registry_enforcequota=true
+
+openshift_hosted_registry_storage_kind=nfs
+openshift_hosted_registry_storage_access_modes=['ReadWriteMany']
+openshift_hosted_registry_storage_nfs_directory=/srv/nfs
+openshift_hosted_registry_storage_nfs_options='*(rw,root_squash)'
+openshift_hosted_registry_storage_volume_name=registry
+openshift_hosted_registry_storage_volume_size=20Gi
+# END Registry
+
+#
+# Metrics
+#
+openshift_metrics_install_metrics=True
+openshift_hosted_prometheus_deploy=true
+
+openshift_metrics_storage_kind=nfs
+openshift_metrics_storage_access_modes=['ReadWriteOnce']
+openshift_metrics_storage_nfs_directory=/srv/nfs
+openshift_metrics_storage_nfs_options='*(rw,root_squash)'
+openshift_metrics_storage_volume_name=metrics
+openshift_metrics_storage_volume_size=10Gi
+openshift_metrics_storage_labels={'storage': 'metrics'}
+openshift_metrics_cassandra_pvc_storage_class_name=''
+
+openshift_metrics_hawkular_nodeselector={"node-role.kubernetes.io/infra": "true"}
+openshift_metrics_cassandra_nodeselector={"node-role.kubernetes.io/infra": "true"}
+openshift_metrics_heapster_nodeselector={"node-role.kubernetes.io/infra": "true"}
+
+openshift_metrics_duration=2
+
+openshift_prometheus_namespace=openshift-metrics
+openshift_prometheus_node_selector={"node-role.kubernetes.io/infra":"true"}
+openshift_prometheus_memory_requests=2Gi
+openshift_prometheus_cpu_requests=750m
+openshift_prometheus_memory_limit=2Gi
+openshift_prometheus_cpu_limit=750m
+openshift_prometheus_alertmanager_memory_requests=300Mi
+openshift_prometheus_alertmanager_cpu_requests=200m
+openshift_prometheus_alertmanager_memory_limit=300Mi
+openshift_prometheus_alertmanager_cpu_limit=200m
+openshift_prometheus_alertbuffer_memory_requests=300Mi
+openshift_prometheus_alertbuffer_cpu_requests=200m
+openshift_prometheus_alertbuffer_memory_limit=300Mi
+openshift_prometheus_alertbuffer_cpu_limit=200m
+
+openshift_grafana_node_selector={"node-role.kubernetes.io/infra":"true"}
+openshift_grafana_storage_type=pvc
+openshift_grafana_pvc_size=2Gi
+openshift_grafana_node_exporter=true
+# END Metrics
+
+#
+# Logging
+#
+openshift_logging_install_logging=True
+openshift_logging_install_eventrouter=True
+
+openshift_logging_storage_kind=nfs
+openshift_logging_storage_access_modes=['ReadWriteOnce']
+openshift_logging_storage_nfs_directory=/srv/nfs
+openshift_logging_storage_nfs_options='*(rw,root_squash)'
+openshift_logging_storage_volume_name=logging
+openshift_logging_storage_volume_size=10Gi
+openshift_logging_storage_labels={'storage': 'logging'}
+openshift_logging_es_pvc_storage_class_name=''
+openshift_logging_es_memory_limit=8Gi
+openshift_logging_es_cluster_size=1
+openshift_logging_curator_default_days=2
+
+openshift_logging_kibana_nodeselector={"node-role.kubernetes.io/infra": "true"}
+openshift_logging_curator_nodeselector={"node-role.kubernetes.io/infra": "true"}
+openshift_logging_es_nodeselector={"node-role.kubernetes.io/infra": "true"}
+openshift_logging_eventrouter_nodeselector={"node-role.kubernetes.io/infra": "true"}
+# END Logging
+
+#
+# Hosts
+#
 [OSEv3:children]
 lb
 masters
-nodes
 etcd
+nodes
 nfs
 
-[OSEv3:vars]
-openshift_release=v3.11
-openshift_image_tag=v3.11.16
-openshift_pkg_version=-3.11.16
-openshift_version=v3.11.16
-openshift_deployment_type=openshift-enterprise
-openshift_master_cluster_method=native
-openshift_disable_check=disk_availability,memory_availability,docker_storage,docker_image_availability
-openshift_install_examples=true
-
-# URLs
-openshift_master_cluster_public_hostname=console.{{ env_id }}.{{ dns_domain }}
-openshift_master_cluster_hostname=api.{{ env_id }}.{{ dns_domain }}
-openshift_master_default_subdomain=apps.{{ env_id }}.{{ dns_domain }}
-
-# HTPASSWD Identity Provider
-openshift_master_identity_providers="[{'name': 'Default Authentication', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider'}]"
-openshift_master_htpasswd_file='/etc/origin/master/htpasswd'
-
-openshift_master_htpasswd_users="[{'admin': '$apr1$7aiANAYb$TOUYVUqnBqBlD5AQEIMYw1'}]"
-openshift_hosted_manage_router=true
-openshift_hosted_router_selector='node-role.kubernetes.io/infra=true'
-openshift_router_selector='node-role.kubernetes.io/infra=true'
-osm_default_node_selector='node-role.kubernetes.io/compute=true'
-openshift_docker_options="--log-driver=json-file --log-opt max-size=50m --log-opt max-file=100"
-
-# Storage
-# We're using NFS (first pass) so we have to enable unsupported configs
-# Our NFS share has 50Gi available, we're going to allocate 10 for the registry
-# which gives us enough to toy with different PVs later
-#
-# TODO=Swap this out for a OCS-3.11 config using Gluster
-#
-openshift_enable_unsupported_configurations=true
-openshift_hosted_registry_storage_kind=nfs
-openshift_hosted_registry_storage_host=support1.a935.internal
-openshift_hosted_registry_storage_access_modes="['ReadWriteMany']"
-openshift_hosted_registry_storage_nfs_directory=/srv/nfs/
-openshift_hosted_registry_storage_nfs_options='*(rw,root_squash,no_wdelay,sync)'
-openshift_hosted_registry_storage_volume_name=registry
-openshift_hosted_registry_storage_volume_size=10Gi
-openshift_hosted_registry_selector='node-role.kubernetes.io/infra=true'
-
-# Networking
-os_sdn_network_plugin_name='redhat/openshift-ovs-networkpolicy'
-os_firewall_use_firewalld=true
-osm_cluster_network_cidr=10.1.0.0/16
-openshift_master_console_port=443
-openshift_master_api_port=443
-
-# Registry URL & Credentials
-system_images_registry='registry.redhat.io'
-oreg_url='registry.redhat.io/openshift3/ose-${component}:${version}'
-oreg_auth_user="{{ lookup('env', 'OREG_AUTH_USER' )}}"
-oreg_auth_password="{{ lookup('env', 'OREG_AUTH_PASSWORD' )}}"
-
-# Metrics
-openshift_hosted_prometheus_deploy=false
-openshift_cfme_install_app=false
-
-#
-# Group and Host-specific vars
-#
-
-[all:vars]
-env_id=a935
-ansible_user=ec2-user
-ansible_become=true
-dns_domain="example.opentlc.com"
-rhsm_register=True
-rhsm_repos="['rhel-7-server-rpms', 'rhel-7-server-ose-3.11-rpms', 'rhel-7-server-extras-rpms', 'rhel-7-server-ansible-2.6-rpms']"
-rhsm_username="{{ lookup('env', 'RHSM_USER' )}}"
-rhsm_password="{{ lookup('env', 'RHSM_PASSWD' )}}"
-
-[nodes:vars]
-docker_storage_block_device="/dev/xvdb"
-docker_storage_mount_point="/var/lib/containers/docker"
-# Subscription Management Details
-docker_version="1.13.1"
-openshift_docker_service_name='docker'
+[lb]
+loadbalancer1.$GUID.internal
 
 [masters]
-master[1:3].a935.internal
+master[1:3].$GUID.internal
 
 [masters:vars]
-ansible_ssh_host="{{ inventory_hostname.split('.')[0] }}.a935.internal"
-openshift_hostname="{{ ansible_ssh_host }}"
 openshift_node_group_name='node-config-master'
-openshift_node_labels="['node-role.kubernetes.io/master=true']"
-openshift_node_open_ports="[{'service': 'prometheus node exporter', 'port': '9100/tcp'}]"
+
+[infra_nodes]
+infranode[1:2].$GUID.internal
+
+[infra_nodes:vars]
+openshift_node_group_name='node-config-infra'
+
+[app_nodes:vars]
+openshift_node_group_name='node-config-compute'
 
 [etcd]
-master[1:3].a935.internal
+master[1:3].$GUID.internal
 
 [nodes:children]
 masters
-infra_hosts
-app_hosts
+infra_nodes
+app_nodes
 
-[infra_hosts]
-infranode[1:2].a935.internal 
-
-[infra_hosts:vars]
-ansible_ssh_host="{{ inventory_hostname.split('.')[0] }}.a935.internal"
-openshift_hostname="{{ ansible_ssh_host }}"
-openshift_node_group_name='node-config-infra'
-openshift_node_labels="['node-role.kubernetes.io/infra=true']"
-openshift_node_open_ports="[{'service': 'prometheus node exporter', 'port': '9100/tcp'}]"
-
-[app_hosts]
-node[1:4].a935.internal
-
-[app_hosts:vars]
-ansible_ssh_host="{{ inventory_hostname.split('.')[0] }}.a935.internal"
-openshift_hostname="{{ ansible_ssh_host }}"
-openshift_node_group_name='node-config-compute'
-openshift_node_labels="['node-role.kubernetes.io/compute=true']"
-openshift_node_open_ports="[{'service': 'prometheus node exporter', 'port': '9100/tcp'}]"
+[nodes:vars]
+openshift_node_problem_detector_install=true
 
 [nfs]
-support1.a935.internal
-
-[lb]
-loadbalancer1.a935.internal 
+support1.$GUID.internal
+# END Hosts
