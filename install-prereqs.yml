@@ -1,0 +1,9 @@
+---
+- name: Install Ansible Galaxy pre-requisites
+  hosts: localhost
+  connection: local
+  become: false
+  tasks:
+    - name: Install galaxy requirements from file
+      command: ansible-galaxy install -r requirements.yml --roles-path roles
+...
