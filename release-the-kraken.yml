@@ -1,6 +1,6 @@
 ---
 # Pre-reqs
-- import_playbook: ../galaxy/openshift-ansible/playbooks/prerequisites.yml
+- import_playbook: ./roles/openshift-ansible/playbooks/prerequisites.yml
 # Install
-- import_playbook: ../galaxy/openshift-ansible/playbooks/deploy_cluster.yml
+- import_playbook: ./roles/openshift-ansible/playbooks/deploy_cluster.yml
 ...
